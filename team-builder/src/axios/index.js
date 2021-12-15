@@ -2,12 +2,18 @@ import { v4 as uuid } from 'uuid'
 
 // 👉 the shape of the list of friends from API
 const initialMembersList = [
-  // {
-  //   id: uuid(), // uuid is a lib to generate random, unique ids
-  //   username: 'Michael',
-  //   email: 'michael@michael.com',
-  //   role: 'Intern',
-  // },
+  {
+    id: uuid(), // uuid is a lib to generate random, unique ids
+    username: 'Michael',
+    email: 'michael@michael.com',
+    role: 'Intern',
+  },
+  {
+    id: uuid(), // uuid is a lib to generate random, unique ids
+    username: 'Vasya',
+    email: 'vasya@pupkin.com',
+    role: 'Intern',
+  },
 ]
 
 // 👉 simulating axios for [GET] and [POST]

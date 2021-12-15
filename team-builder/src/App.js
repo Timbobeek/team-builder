@@ -24,10 +24,12 @@ function App() {
   const [formValues, setFormValues] = useState(initialFormValues);
   const [error, setError] = useState("");
 
+  // callback to update "current member" -- formValues
   const updateForm = (inputName, inputValue) => {
     setFormValues({ ...formValues, [inputName]: inputValue });
   }
 
+  // callback for "submit"
   const submitForm = () => {
     const newMember = {
       username: formValues.username.trim(),
@@ -36,7 +38,7 @@ function App() {
     }
 
     if (!newMember.username || !newMember.email || !newMember.role) {
-      setError("All fields are required, ya chump!!!");
+      setError("All fields are required!");
     } else {
       axios.post("fakeapi.com", newMember)
         .then(res => {
@@ -48,8 +50,10 @@ function App() {
     }
   }
 
+  // initial state
   useEffect(() => {
-    axios.get('fakeapi.com').then(res => setMembers(res.data))
+    axios.get('fakeapi.com')
+      .then(res => setMembers(res.data))
   }, [])
 
   return (

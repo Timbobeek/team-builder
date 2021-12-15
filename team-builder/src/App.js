@@ -1,27 +1,77 @@
 import logo from './logo.svg';
 import './App.css';
 
-//start here!
+import React, { useState, useEffect } from 'react'
+import axios from './axios'
+import Member from './Member'
+import MemberForm from './MemberForm';
+
+const initialFormValues = {
+  ///// TEXT INPUTS /////
+  username: '',
+  email: '',
+  ///// DROPDOWN /////
+  role: '',
+}
+
+
+
 
 function App() {
+  const [members, setMembers] = useState([]) 
+
+ 
+  const [formValues, setFormValues] = useState(initialFormValues);
+  const [error, setError] = useState("");
+
+  const updateForm = (inputName, inputValue) => {
+    setFormValues({ ...formValues, [inputName]: inputValue });
+  }
+
+  const submitForm = () => {
+    const newMember = {
+      username: formValues.username.trim(),
+      email: formValues.email.trim(),
+      role: formValues.role
+    }
+
+    if (!newMember.username || !newMember.email || !newMember.role) {
+      setError("All fields are required, ya chump!!!");
+    } else {
+      axios.post("fakeapi.com", newMember)
+        .then(res => {
+          const memberFromServer = res.data;
+          setMembers([ memberFromServer, ...members ]);
+          setFormValues(initialFormValues);
+        }).catch(err => console.error(err))
+        .finally(() => setError(""))
+    }
+  }
+
+  useEffect(() => {
+    axios.get('fakeapi.com').then(res => setMembers(res.data))
+  }, [])
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className='container'>
+      <h1>Form App</h1>
+      <h2>{error}</h2>
+      <MemberForm
+        values={formValues}
+        update={updateForm}
+        submit={submitForm}
+      />
+
+      {
+        members.map(member => {
+          return (
+            <Member key={member.id} details={member} />
+          )
+        })
+      }
     </div>
-  );
+  )
 }
+
 
 export default App;
